@@ -172,6 +172,19 @@ class WikiApi {
         return null
     }
 
+    /** How many versions of a casting its wiki page lists (no images fetched). */
+    suspend fun versionCount(title: String): Int? = wikitext(title)?.let { releasesFrom(it, title).size }
+
+    /** Names of this year's (or last year's) Treasure Hunts and Super Treasure Hunts, without fetching images. */
+    suspend fun treasureHuntNames(year: Int): List<String> {
+        for (y in listOf(year, year - 1)) {
+            val title = "$y Treasure Hunts Series"
+            val names = wikitext(title)?.let { releasesFrom(it, title).map { r -> r.modelName } }.orEmpty()
+            if (names.isNotEmpty()) return names.distinct()
+        }
+        return emptyList()
+    }
+
     /** Most recent mainline releases that already have a photo on the wiki. */
     suspend fun latestReleases(year: Int, count: Int = 20): List<Release> {
         for (y in listOf(year, year - 1)) {

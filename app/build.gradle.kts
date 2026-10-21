@@ -13,8 +13,8 @@ android {
         applicationId = "com.hotwheelsgarage"
         minSdk = 26
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.3"
+        versionCode = 5
+        versionName = "1.4"
     }
 
     buildTypes {
@@ -65,6 +65,9 @@ dependencies {
     implementation("com.google.mlkit:text-recognition:16.0.1")
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+
+    // Background drop checks
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
 
     // Networking + images
     implementation("com.squareup.okhttp3:okhttp:4.12.0")

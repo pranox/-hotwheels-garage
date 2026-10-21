@@ -42,6 +42,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hotwheelsgarage.HotWheelsApp
+import com.hotwheelsgarage.alerts.AlertScheduler
+import com.hotwheelsgarage.data.Settings
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Switch
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.input.KeyboardType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -49,6 +57,8 @@ import kotlinx.coroutines.withContext
 class SettingsViewModel(app: Application) : AndroidViewModel(app) {
     private val garage = app as HotWheelsApp
     val settings = garage.settings
+
+    fun applyAlerts() = AlertScheduler.apply(garage)
 
     fun export(uri: Uri, onDone: (String) -> Unit) = viewModelScope.launch {
         val result = runCatching {
@@ -78,6 +88,25 @@ fun SettingsScreen(onBack: () -> Unit, vm: SettingsViewModel = viewModel()) {
     val uriHandler = LocalUriHandler.current
     var key by remember { mutableStateOf(vm.settings.geminiKey) }
     var model by remember { mutableStateOf(vm.settings.geminiModel) }
+    var interval by remember { mutableStateOf(vm.settings.checkIntervalMinutes) }
+    var customInterval by remember { mutableStateOf("") }
+    var quiet by remember { mutableStateOf(vm.settings.quietStartHour to vm.settings.quietEndHour) }
+    var salesHour by remember { mutableStateOf(vm.settings.salesHourReminder) }
+    var subreddits by remember { mutableStateOf(vm.settings.subreddits) }
+    var channels by remember { mutableStateOf(vm.settings.telegramChannels) }
+    var places by remember { mutableStateOf(vm.settings.locationKeywords) }
+    val saveAll = {
+        vm.settings.geminiKey = key
+        vm.settings.geminiModel = model
+        vm.settings.checkIntervalMinutes = customInterval.toIntOrNull() ?: interval
+        vm.settings.quietStartHour = quiet.first
+        vm.settings.quietEndHour = quiet.second
+        vm.settings.salesHourReminder = salesHour
+        vm.settings.subreddits = subreddits
+        vm.settings.telegramChannels = channels
+        vm.settings.locationKeywords = places
+        vm.applyAlerts()
+    }
     val toast: (String) -> Unit = { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
 
     val exporter = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
@@ -93,8 +122,7 @@ fun SettingsScreen(onBack: () -> Unit, vm: SettingsViewModel = viewModel()) {
                 title = { Text("Settings") },
                 navigationIcon = {
                     IconButton(onClick = {
-                        vm.settings.geminiKey = key
-                        vm.settings.geminiModel = model
+                        saveAll()
                         onBack()
                     }) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") }
                 },
@@ -130,9 +158,77 @@ fun SettingsScreen(onBack: () -> Unit, vm: SettingsViewModel = viewModel()) {
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
+            HorizontalDivider()
+            Text("Drop alerts", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text("Check every", style = MaterialTheme.typography.titleSmall)
+            Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                listOf(15, 30, 45, 60, 120, 180, 360).forEach { m ->
+                    FilterChip(
+                        selected = customInterval.isEmpty() && interval == m,
+                        onClick = { interval = m; customInterval = "" },
+                        label = { Text(if (m < 60) "$m min" else "${m / 60} h") },
+                    )
+                }
+            }
+            OutlinedTextField(
+                value = customInterval,
+                onValueChange = { v -> customInterval = v.filter { it.isDigit() }.take(4) },
+                label = { Text("Custom (minutes)") },
+                supportingText = {
+                    val n = customInterval.toIntOrNull()
+                    Text(
+                        if (n != null && n < Settings.MIN_INTERVAL_MINUTES) "Android allows every 15 minutes at the most, so this will use 15."
+                        else "Shorter = faster alerts, a little more battery. Android may delay checks while the phone is idle."
+                    )
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Text("Quiet hours (no checks)", style = MaterialTheme.typography.titleSmall)
+            Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                listOf(
+                    (-1 to -1) to "Off",
+                    (23 to 7) to "11 pm–7 am",
+                    (0 to 6) to "12 am–6 am",
+                    (22 to 8) to "10 pm–8 am",
+                ).forEach { (range, label) ->
+                    FilterChip(selected = quiet == range, onClick = { quiet = range }, label = { Text(label) })
+                }
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text("6 pm Sales Hour reminder")
+                    Text("A nudge before r/HotWheelsIndia's daily MRP sales", style = MaterialTheme.typography.bodySmall)
+                }
+                Switch(checked = salesHour, onCheckedChange = { salesHour = it })
+            }
+            OutlinedTextField(
+                value = subreddits,
+                onValueChange = { subreddits = it },
+                label = { Text("Subreddits to watch") },
+                supportingText = { Text("Comma separated, e.g. HotWheelsIndia") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            OutlinedTextField(
+                value = channels,
+                onValueChange = { channels = it },
+                label = { Text("Telegram channels to watch") },
+                supportingText = { Text("Public channel usernames, comma separated (without @)") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            OutlinedTextField(
+                value = places,
+                onValueChange = { places = it },
+                label = { Text("Your area") },
+                supportingText = { Text("Posts mentioning these get a \"Near you\" tag and always alert") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
             Button(onClick = {
-                vm.settings.geminiKey = key
-                vm.settings.geminiModel = model
+                saveAll()
                 toast("Saved")
             }) { Text("Save") }
 

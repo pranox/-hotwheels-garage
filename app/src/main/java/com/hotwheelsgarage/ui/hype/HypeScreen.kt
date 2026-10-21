@@ -53,6 +53,7 @@ import com.hotwheelsgarage.data.Release
 import com.hotwheelsgarage.ui.common.CarImage
 import com.hotwheelsgarage.ui.common.HuntBadge
 import com.hotwheelsgarage.ui.common.PlateLabel
+import com.hotwheelsgarage.ui.common.StoreLinks
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -120,6 +121,7 @@ fun HypeScreen(vm: HypeViewModel = viewModel()) {
                         release.collectorNumber?.let { "Col. #: $it" },
                         release.toyNumber?.let { "Toy #: $it" },
                     ).forEach { Text(it) }
+                    StoreLinks(release.modelName, Modifier.padding(top = 8.dp))
                 }
             },
             confirmButton = {

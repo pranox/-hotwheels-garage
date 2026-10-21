@@ -4,37 +4,47 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Scaled and centred so the whole car stays inside the 66dp safe zone launchers never crop. -->
+    <!-- Flame "HW" badge (original artwork, not the Mattel logo) -->
     <group
-        android:pivotX="51.5"
-        android:pivotY="65.5"
-        android:scaleX="0.72"
-        android:scaleY="0.72"
-        android:translateX="2.5"
-        android:translateY="-11.5">
-        <!-- Track ramping up to the right -->
+        android:pivotX="56"
+        android:pivotY="40.5"
+        android:scaleX="0.84"
+        android:scaleY="0.84"
+        android:translateX="-2"
+        android:translateY="1.5">
         <path
-            android:fillColor="#000000"
-            android:fillAlpha="0.88"
-            android:pathData="M-4,75L56,75C76,75 92,70 112,56L112,70C92,84 76,87 56,87L-4,87Z" />
+            android:fillColor="#E4161B"
+            android:pathData="M27,49C28,43 31,40 35,38C33,41 33,43 35,44C36,38 41,33 47,31.5L81,29.5Q86,29.3 84.8,33.8L81,46.5Q80,50 76,50.2L31,51.5Q26.5,51.6 27,49Z"
+            android:strokeColor="#FFC72C"
+            android:strokeLineJoin="round"
+            android:strokeWidth="2.2" />
         <path
-            android:pathData="M-4,75L56,75C76,75 92,70 112,56"
-            android:strokeAlpha="0.95"
+            android:pathData="M45,46L48.4,35.5M54,46L57.4,35.5M46.6,41L55.6,41"
             android:strokeColor="#FFFFFF"
-            android:strokeWidth="1.6" />
-        <!-- Speed lines -->
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:strokeWidth="3.4" />
         <path
-            android:fillColor="#FFFFFF"
-            android:fillAlpha="0.85"
-            android:pathData="M14.4,47H22.6A1.4,1.4 0,0 1 24,48.4V48.4A1.4,1.4 0,0 1 22.6,49.8H14.4A1.4,1.4 0,0 1 13,48.4V48.4A1.4,1.4 0,0 1 14.4,47Z" />
+            android:pathData="M61,35.5L61.6,46L66,39.5L67.4,46L73.6,35.5"
+            android:strokeColor="#FFFFFF"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:strokeWidth="3.4" />
+    </group>
+    <!-- Hot rod on a track below the badge -->
+    <group
+        android:pivotX="57.5"
+        android:pivotY="60"
+        android:scaleX="0.62"
+        android:scaleY="0.62"
+        android:translateX="-3.5"
+        android:translateY="10">
         <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M10.4,53.5H21.6A1.4,1.4 0,0 1 23,54.9V54.9A1.4,1.4 0,0 1 21.6,56.3H10.4A1.4,1.4 0,0 1 9,54.9V54.9A1.4,1.4 0,0 1 10.4,53.5Z" />
-        <path
-            android:fillColor="#FFFFFF"
-            android:fillAlpha="0.85"
-            android:pathData="M15.4,60H21.6A1.4,1.4 0,0 1 23,61.4V61.4A1.4,1.4 0,0 1 21.6,62.8H15.4A1.4,1.4 0,0 1 14,61.4V61.4A1.4,1.4 0,0 1 15.4,60Z" />
-        <!-- Rear spoiler and hot-rod body -->
+            android:pathData="M18,73C40,73 70,73 100,66"
+            android:strokeColor="#FFC72C"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:strokeWidth="2.2" />
         <path
             android:fillColor="#FFFFFF"
             android:pathData="M26,47H34A1,1 0,0 1 35,48V48.8A1,1 0,0 1 34,49.8H26A1,1 0,0 1 25,48.8V48A1,1 0,0 1 26,47Z" />
@@ -45,25 +55,29 @@
             android:fillColor="#FFFFFF"
             android:pathData="M26,64L26,58Q26,55 29,54.5L38,53.5L47,46Q49,44.5 52,44.5L60,44.5Q63,44.5 65,46.5L71,53L85,55.5Q89,56.5 89,60.5L89,64.5Q89,67 86.5,67L28,67Q26,67 26,64Z" />
         <path
-            android:fillColor="#1A0600"
+            android:fillColor="#FF121212"
             android:pathData="M50,47.6Q51,46.8 52.5,46.8L60,46.8Q62,46.8 63.2,48.2L67.4,53L44.6,53Z" />
         <path
             android:pathData="M30,59.6L86,59.6"
-            android:strokeColor="#FF5A1F"
+            android:strokeColor="#E4161B"
             android:strokeLineCap="round"
-            android:strokeWidth="2.4" />
-        <!-- Big rear wheel, smaller front -->
+            android:strokeLineJoin="round"
+            android:strokeWidth="2.6" />
         <path
-            android:fillColor="#1A0600"
-            android:pathData="M30,67A8,8 0,1 1 46,67A8,8 0,1 1 30,67Z" />
+            android:fillColor="#FF121212"
+            android:pathData="M30,67A8,8 0,1 1 46,67A8,8 0,1 1 30,67Z"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.2" />
         <path
-            android:fillColor="#E6E6E6"
+            android:fillColor="#FFBDBDBD"
             android:pathData="M34.6,67A3.4,3.4 0,1 1 41.4,67A3.4,3.4 0,1 1 34.6,67Z" />
         <path
-            android:fillColor="#1A0600"
-            android:pathData="M73,69A6,6 0,1 1 85,69A6,6 0,1 1 73,69Z" />
+            android:fillColor="#FF121212"
+            android:pathData="M73,69A6,6 0,1 1 85,69A6,6 0,1 1 73,69Z"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.2" />
         <path
-            android:fillColor="#E6E6E6"
+            android:fillColor="#FFBDBDBD"
             android:pathData="M76.4,69A2.6,2.6 0,1 1 81.6,69A2.6,2.6 0,1 1 76.4,69Z" />
     </group>
 </vector>
