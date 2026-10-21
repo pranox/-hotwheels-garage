@@ -71,6 +71,7 @@ class CarRepository(private val dao: CarDao) {
         .put("quantity", quantity)
         .putOpt("pricePaid", pricePaid)
         .put("notes", notes)
+        .put("rating", rating)
         .put("addedAt", addedAt)
 
     private fun JSONObject.str(key: String): String? = if (isNull(key)) null else optString(key)
@@ -93,6 +94,7 @@ class CarRepository(private val dao: CarDao) {
         quantity = optInt("quantity", 1),
         pricePaid = if (isNull("pricePaid")) null else optDouble("pricePaid"),
         notes = optString("notes"),
+        rating = optInt("rating", 0).coerceIn(0, 5),
         addedAt = optLong("addedAt", System.currentTimeMillis()),
     )
 }

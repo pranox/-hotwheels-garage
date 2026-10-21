@@ -92,6 +92,7 @@ import com.hotwheelsgarage.scan.Candidate
 import com.hotwheelsgarage.ui.common.Badge
 import com.hotwheelsgarage.ui.common.CarImage
 import com.hotwheelsgarage.ui.common.HuntBadge
+import com.hotwheelsgarage.ui.common.StarRating
 import com.hotwheelsgarage.ui.theme.SuperGold
 import com.hotwheelsgarage.ui.theme.TreasureGreen
 
@@ -395,6 +396,10 @@ private fun ConfirmStage(state: ScanUiState, vm: ScanViewModel, onSaved: () -> U
                     listOf(Car.CONDITION_CARDED, Car.CONDITION_LOOSE).forEach { c ->
                         FilterChip(selected = state.condition == c, onClick = { vm.setCondition(c) }, label = { Text(c) })
                     }
+                }
+                Row(Modifier.fillMaxWidth().padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text("My rating", fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+                    StarRating(state.rating, size = 28.dp, onRate = vm::setRating)
                 }
                 HuntToggle("Treasure Hunt", "Circle-flame logo on card", TreasureGreen, state.isTreasureHunt, vm::setTreasureHunt)
                 HuntToggle("Super Treasure Hunt", "Spectraflame paint + Real Riders", SuperGold, state.isSuperTreasureHunt, vm::setSuperTreasureHunt)
