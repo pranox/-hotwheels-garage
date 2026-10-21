@@ -25,6 +25,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -49,7 +50,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hotwheelsgarage.data.Car
 import com.hotwheelsgarage.ui.common.Badge
 import com.hotwheelsgarage.ui.common.CarImage
-import com.hotwheelsgarage.ui.common.FlameButton
 import com.hotwheelsgarage.ui.common.HuntBadge
 import com.hotwheelsgarage.ui.common.PlateLabel
 import com.hotwheelsgarage.ui.common.StarRating
@@ -98,7 +98,7 @@ fun GarageScreen(
                         Text("My Garage", fontWeight = FontWeight.Bold)
                         Text(
                             (if (ownedCount == 1) "1 car" else "$ownedCount cars") +
-                                (averageRating?.let { " · ★ %.1f avg rating".format(it) } ?: ""),
+                                (averageRating?.let { " · ★ %.1f avg score".format(it) } ?: ""),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
@@ -107,7 +107,11 @@ fun GarageScreen(
             )
         },
         floatingActionButton = {
-            FlameButton(onClick = onScan) { Icon(Icons.Filled.CameraAlt, "Scan a car") }
+            FloatingActionButton(
+                onClick = onScan,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+            ) { Icon(Icons.Filled.CameraAlt, "Scan a car") }
         },
     ) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {

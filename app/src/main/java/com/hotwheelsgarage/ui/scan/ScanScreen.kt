@@ -94,6 +94,8 @@ import com.hotwheelsgarage.ui.common.CarImage
 import com.hotwheelsgarage.ui.common.HuntBadge
 import com.hotwheelsgarage.ui.common.PlateLabel
 import com.hotwheelsgarage.ui.common.RarityBanner
+import com.hotwheelsgarage.ui.common.StoreLinks
+import com.hotwheelsgarage.data.CollectorScore
 import com.hotwheelsgarage.data.RarityCheck
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -412,6 +414,8 @@ private fun ConfirmStage(state: ScanUiState, vm: ScanViewModel, onSaved: () -> U
                     }
                 }
 
+                Spacer(Modifier.height(12.dp))
+                StoreLinks(details?.name ?: candidate.title)
                 Spacer(Modifier.height(16.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf(Car.CONDITION_CARDED, Car.CONDITION_LOOSE).forEach { c ->
@@ -419,8 +423,15 @@ private fun ConfirmStage(state: ScanUiState, vm: ScanViewModel, onSaved: () -> U
                     }
                 }
                 Row(Modifier.fillMaxWidth().padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text("My rating", fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
-                    StarRating(state.rating, onRate = vm::setRating)
+                    val score = CollectorScore.of(
+                        state.isTreasureHunt, state.isSuperTreasureHunt,
+                        state.chosenRelease?.series, state.chosenRelease?.year, details?.versions?.size,
+                    )
+                    Column(Modifier.weight(1f)) {
+                        Text("Collector score", fontWeight = FontWeight.SemiBold)
+                        Text(score.reasons.joinToString(" · "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    StarRating(score.stars, size = 22.dp)
                 }
                 HuntToggle("Treasure Hunt", "Circle-flame logo on card", TreasureGreen, state.isTreasureHunt, vm::setTreasureHunt)
                 HuntToggle("Super Treasure Hunt", "Spectraflame paint + Real Riders", SuperGold, state.isSuperTreasureHunt, vm::setSuperTreasureHunt)

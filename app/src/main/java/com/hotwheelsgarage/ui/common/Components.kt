@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material.icons.filled.Whatshot
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,7 +37,6 @@ import com.hotwheelsgarage.data.Rarity
 import com.hotwheelsgarage.data.RarityLevel
 import com.hotwheelsgarage.ui.theme.CardBlue
 import com.hotwheelsgarage.ui.theme.Chrome
-import com.hotwheelsgarage.ui.theme.FlameGradient
 import com.hotwheelsgarage.ui.theme.Garage
 import com.hotwheelsgarage.ui.theme.Ink
 import com.hotwheelsgarage.ui.theme.Plate
@@ -114,42 +112,18 @@ fun PlateLabel(text: String, modifier: Modifier = Modifier) {
     )
 }
 
-/** 1–5 stars. Pass [onRate] to make it tappable; tapping the current rating clears it. */
+/** 1–5 stars for a collector score (display only). */
 @Composable
-fun StarRating(rating: Int, modifier: Modifier = Modifier, size: Dp = 28.dp, onRate: ((Int) -> Unit)? = null) {
-    val readOnly = onRate == null
-    Row(
-        modifier.then(
-            if (readOnly) Modifier.clearAndSetSemantics { contentDescription = "Rated $rating of 5 stars" } else Modifier
-        )
-    ) {
+fun StarRating(rating: Int, modifier: Modifier = Modifier, size: Dp = 28.dp) {
+    Row(modifier.clearAndSetSemantics { contentDescription = "Collector score $rating of 5" }) {
         for (star in 1..5) {
-            val icon = if (star <= rating) Icons.Filled.Star else Icons.Filled.StarBorder
-            val tint = if (star <= rating) Chrome else MaterialTheme.colorScheme.outline
-            if (readOnly) {
-                Icon(icon, null, tint = tint, modifier = Modifier.size(size))
-            } else {
-                // 48dp touch target even when the star itself is smaller.
-                IconButton(onClick = { onRate?.invoke(if (star == rating) 0 else star) }, modifier = Modifier.size(maxOf(size + 8.dp, 48.dp))) {
-                    Icon(icon, if (star == rating) "Clear rating" else "Rate $star of 5", tint = tint, modifier = Modifier.size(size))
-                }
-            }
+            Icon(
+                if (star <= rating) Icons.Filled.Star else Icons.Filled.StarBorder,
+                null,
+                tint = if (star <= rating) Chrome else MaterialTheme.colorScheme.outline,
+                modifier = Modifier.size(size),
+            )
         }
-    }
-}
-
-/** The scan button: a floating action button filled with the Hot Wheels flame gradient. */
-@Composable
-fun FlameButton(onClick: () -> Unit, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(16.dp),
-        color = Color.Transparent,
-        contentColor = MaterialTheme.colorScheme.onPrimary,
-        shadowElevation = 6.dp,
-        modifier = modifier.size(56.dp),
-    ) {
-        Box(Modifier.background(FlameGradient), contentAlignment = Alignment.Center) { content() }
     }
 }
 

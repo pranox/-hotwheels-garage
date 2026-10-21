@@ -37,7 +37,6 @@ data class ScanUiState(
     val isTreasureHunt: Boolean = false,
     val isSuperTreasureHunt: Boolean = false,
     val condition: String = Car.CONDITION_CARDED,
-    val rating: Int = 0,
 )
 
 class ScanViewModel(app: Application) : AndroidViewModel(app) {
@@ -144,7 +143,6 @@ class ScanViewModel(app: Application) : AndroidViewModel(app) {
     fun setTreasureHunt(value: Boolean) = _state.update { it.copy(isTreasureHunt = value, isSuperTreasureHunt = it.isSuperTreasureHunt && !value) }
     fun setSuperTreasureHunt(value: Boolean) = _state.update { it.copy(isSuperTreasureHunt = value, isTreasureHunt = it.isTreasureHunt && !value) }
     fun setCondition(value: String) = _state.update { it.copy(condition = value) }
-    fun setRating(value: Int) = _state.update { it.copy(rating = value) }
 
     fun save(wishlist: Boolean, onSaved: () -> Unit) {
         val s = _state.value
@@ -167,7 +165,7 @@ class ScanViewModel(app: Application) : AndroidViewModel(app) {
             isSuperTreasureHunt = s.isSuperTreasureHunt,
             isWishlist = wishlist,
             condition = s.condition,
-            rating = s.rating,
+            versionCount = d?.versions?.size,
         )
         viewModelScope.launch {
             garage.repository.addOrIncrement(car)

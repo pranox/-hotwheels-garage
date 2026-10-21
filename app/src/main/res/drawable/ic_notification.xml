@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status-bar icon: the app icon's hot rod as a white silhouette. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:pivotX="57.5"
+        android:pivotY="58"
+        android:scaleX="1.35"
+        android:scaleY="1.35"
+        android:translateX="-3.5"
+        android:translateY="-4">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M26,64L26,58Q26,55 29,54.5L38,53.5L47,46Q49,44.5 52,44.5L60,44.5Q63,44.5 65,46.5L71,53L85,55.5Q89,56.5 89,60.5L89,64.5Q89,67 86.5,67L28,67Q26,67 26,64Z" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M30,67A8,8 0,1 1 46,67A8,8 0,1 1 30,67ZM73,69A6,6 0,1 1 85,69A6,6 0,1 1 73,69ZM25,47H35V49.8H25ZM28.5,48H31.1V55H28.5Z" />
+    </group>
+</vector>

@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.DirectionsCar
+import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Whatshot
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -30,6 +31,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.hotwheelsgarage.ui.drops.DropsScreen
 import com.hotwheelsgarage.ui.garage.CarDetailScreen
 import com.hotwheelsgarage.ui.garage.GarageScreen
 import com.hotwheelsgarage.ui.hype.HypeScreen
@@ -55,6 +57,7 @@ private data class Tab(val route: String, val label: String, val icon: ImageVect
 private val tabs = listOf(
     Tab("garage", "Garage", Icons.Filled.DirectionsCar),
     Tab("scan", "Scan", Icons.Filled.CameraAlt),
+    Tab("drops", "Drops", Icons.Filled.NotificationsActive),
     Tab("hype", "Hype", Icons.Filled.Whatshot),
     Tab("stats", "Stats", Icons.Filled.BarChart),
 )
@@ -96,6 +99,7 @@ private fun App() {
                 )
             }
             composable("scan") { ScanScreen(onSaved = { nav.openTab("garage") }) }
+            composable("drops") { DropsScreen(onSettings = { nav.navigate("settings") }) }
             composable("hype") { HypeScreen() }
             composable("stats") { StatsScreen() }
             composable("car/{id}", arguments = listOf(navArgument("id") { type = NavType.LongType })) {

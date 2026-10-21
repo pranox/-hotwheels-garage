@@ -27,8 +27,12 @@ data class Car(
     val quantity: Int = 1,
     val pricePaid: Double? = null,
     val notes: String = "",
-    /** Your own 1–5 star rating, 0 = not rated. */
+    /** Collector score 1–5, worked out by [CollectorScore] from the wiki data. 0 = not scored yet. */
     val rating: Int = 0,
+    /** Why it got that score, e.g. "Treasure Hunt · Older release (2008)". */
+    val ratingNote: String? = null,
+    /** How many versions of this casting the wiki lists. */
+    val versionCount: Int? = null,
     val addedAt: Long = System.currentTimeMillis(),
 ) {
     companion object {

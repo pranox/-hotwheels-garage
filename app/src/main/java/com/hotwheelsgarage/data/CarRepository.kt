@@ -19,7 +19,22 @@ class CarRepository(private val dao: CarDao) {
     }
 
     /** Adds the car, or bumps the quantity if the exact same release is already owned. */
-    suspend fun addOrIncrement(car: Car): Long {
+    suspend fun addOrIncrement(car: Car): Long = addOrIncrementScored(car.scored())
+
+    /** Scores cars added before collector scores existed, fetching each casting's version count once. */
+    suspend fun scoreUnscored(versionCount: suspend (String) -> Int?) {
+        dao.unscored().forEach { car ->
+            val versions = car.versionCount ?: car.wikiTitle?.let { runCatching { versionCount(it) }.getOrNull() }
+            dao.update(car.copy(versionCount = versions).scored())
+        }
+    }
+
+    private fun Car.scored(): Car {
+        val score = CollectorScore.of(this)
+        return copy(rating = score.stars, ratingNote = score.reasons.joinToString(" · "))
+    }
+
+    private suspend fun addOrIncrementScored(car: Car): Long {
         if (!car.isWishlist && car.wikiTitle != null) {
             val same = dao.ownedWithTitles(listOf(car.wikiTitle)).firstOrNull {
                 it.toyNumber == car.toyNumber && it.color == car.color
@@ -32,7 +47,9 @@ class CarRepository(private val dao: CarDao) {
         return dao.insert(car)
     }
 
-    suspend fun update(car: Car) = dao.update(car)
+    suspend fun wishlistNames(): List<String> = dao.wishlistNames()
+
+    suspend fun update(car: Car) = dao.update(car.scored())
 
     suspend fun delete(car: Car) {
         dao.delete(car)
@@ -49,7 +66,7 @@ class CarRepository(private val dao: CarDao) {
     suspend fun importJson(json: String): Int {
         val array = JSONObject(json).getJSONArray("cars")
         val cars = (0 until array.length()).map { array.getJSONObject(it).toCar() }
-        dao.insertAll(cars)
+        dao.insertAll(cars.map { it.scored() })
         return cars.size
     }
 
@@ -71,7 +88,7 @@ class CarRepository(private val dao: CarDao) {
         .put("quantity", quantity)
         .putOpt("pricePaid", pricePaid)
         .put("notes", notes)
-        .put("rating", rating)
+        .putOpt("versionCount", versionCount)
         .put("addedAt", addedAt)
 
     private fun JSONObject.str(key: String): String? = if (isNull(key)) null else optString(key)
@@ -94,7 +111,7 @@ class CarRepository(private val dao: CarDao) {
         quantity = optInt("quantity", 1),
         pricePaid = if (isNull("pricePaid")) null else optDouble("pricePaid"),
         notes = optString("notes"),
-        rating = optInt("rating", 0).coerceIn(0, 5),
+        versionCount = if (isNull("versionCount")) null else optInt("versionCount"),
         addedAt = optLong("addedAt", System.currentTimeMillis()),
     )
 }

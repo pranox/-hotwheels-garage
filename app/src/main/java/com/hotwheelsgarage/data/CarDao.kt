@@ -21,6 +21,12 @@ interface CarDao {
     @Query("SELECT * FROM cars WHERE isWishlist = 0 AND wikiTitle IN (:titles)")
     suspend fun ownedWithTitles(titles: List<String>): List<Car>
 
+    @Query("SELECT * FROM cars WHERE ratingNote IS NULL")
+    suspend fun unscored(): List<Car>
+
+    @Query("SELECT name FROM cars WHERE isWishlist = 1")
+    suspend fun wishlistNames(): List<String>
+
     @Insert
     suspend fun insert(car: Car): Long
 
