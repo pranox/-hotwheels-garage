@@ -1,4 +1,3 @@
 <resources>
-    <color name="background">#FF0E1320</color>
-    <color name="launcher_background">#FFFF6B00</color>
+    <color name="background">#FF000000</color>
 </resources>

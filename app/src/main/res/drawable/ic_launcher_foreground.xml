@@ -4,12 +4,66 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+    <!-- Scaled and centred so the whole car stays inside the 66dp safe zone launchers never crop. -->
     <group
-        android:translateX="30"
-        android:translateY="28">
-        <!-- Material "directions_car" glyph, scaled 2x -->
+        android:pivotX="51.5"
+        android:pivotY="65.5"
+        android:scaleX="0.72"
+        android:scaleY="0.72"
+        android:translateX="2.5"
+        android:translateY="-11.5">
+        <!-- Track ramping up to the right -->
         <path
-            android:fillColor="#FFFFFFFF"
-            android:pathData="M37.84,12.02C37.44,10.84 36.32,10 35,10H13c-1.32,0 -2.42,0.84 -2.84,2.02L6,24v16c0,1.1 0.9,2 2,2h2c1.1,0 2,-0.9 2,-2v-2h24v2c0,1.1 0.9,2 2,2h2c1.1,0 2,-0.9 2,-2V24l-4.16,-11.98zM13,32c-1.66,0 -3,-1.34 -3,-3s1.34,-3 3,-3 3,1.34 3,3 -1.34,3 -3,3zM35,32c-1.66,0 -3,-1.34 -3,-3s1.34,-3 3,-3 3,1.34 3,3 -1.34,3 -3,3zM10,22l3,-9h22l3,9H10z" />
+            android:fillColor="#000000"
+            android:fillAlpha="0.88"
+            android:pathData="M-4,75L56,75C76,75 92,70 112,56L112,70C92,84 76,87 56,87L-4,87Z" />
+        <path
+            android:pathData="M-4,75L56,75C76,75 92,70 112,56"
+            android:strokeAlpha="0.95"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="1.6" />
+        <!-- Speed lines -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillAlpha="0.85"
+            android:pathData="M14.4,47H22.6A1.4,1.4 0,0 1 24,48.4V48.4A1.4,1.4 0,0 1 22.6,49.8H14.4A1.4,1.4 0,0 1 13,48.4V48.4A1.4,1.4 0,0 1 14.4,47Z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M10.4,53.5H21.6A1.4,1.4 0,0 1 23,54.9V54.9A1.4,1.4 0,0 1 21.6,56.3H10.4A1.4,1.4 0,0 1 9,54.9V54.9A1.4,1.4 0,0 1 10.4,53.5Z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:fillAlpha="0.85"
+            android:pathData="M15.4,60H21.6A1.4,1.4 0,0 1 23,61.4V61.4A1.4,1.4 0,0 1 21.6,62.8H15.4A1.4,1.4 0,0 1 14,61.4V61.4A1.4,1.4 0,0 1 15.4,60Z" />
+        <!-- Rear spoiler and hot-rod body -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M26,47H34A1,1 0,0 1 35,48V48.8A1,1 0,0 1 34,49.8H26A1,1 0,0 1 25,48.8V48A1,1 0,0 1 26,47Z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M28.5,48H31.1V55H28.5Z" />
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M26,64L26,58Q26,55 29,54.5L38,53.5L47,46Q49,44.5 52,44.5L60,44.5Q63,44.5 65,46.5L71,53L85,55.5Q89,56.5 89,60.5L89,64.5Q89,67 86.5,67L28,67Q26,67 26,64Z" />
+        <path
+            android:fillColor="#1A0600"
+            android:pathData="M50,47.6Q51,46.8 52.5,46.8L60,46.8Q62,46.8 63.2,48.2L67.4,53L44.6,53Z" />
+        <path
+            android:pathData="M30,59.6L86,59.6"
+            android:strokeColor="#FF5A1F"
+            android:strokeLineCap="round"
+            android:strokeWidth="2.4" />
+        <!-- Big rear wheel, smaller front -->
+        <path
+            android:fillColor="#1A0600"
+            android:pathData="M30,67A8,8 0,1 1 46,67A8,8 0,1 1 30,67Z" />
+        <path
+            android:fillColor="#E6E6E6"
+            android:pathData="M34.6,67A3.4,3.4 0,1 1 41.4,67A3.4,3.4 0,1 1 34.6,67Z" />
+        <path
+            android:fillColor="#1A0600"
+            android:pathData="M73,69A6,6 0,1 1 85,69A6,6 0,1 1 73,69Z" />
+        <path
+            android:fillColor="#E6E6E6"
+            android:pathData="M76.4,69A2.6,2.6 0,1 1 81.6,69A2.6,2.6 0,1 1 76.4,69Z" />
     </group>
 </vector>
