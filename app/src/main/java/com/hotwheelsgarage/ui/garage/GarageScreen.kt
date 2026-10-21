@@ -51,6 +51,7 @@ import com.hotwheelsgarage.data.Car
 import com.hotwheelsgarage.ui.common.Badge
 import com.hotwheelsgarage.ui.common.CarImage
 import com.hotwheelsgarage.ui.common.HuntBadge
+import com.hotwheelsgarage.ui.common.PlateLabel
 import com.hotwheelsgarage.ui.common.StarRating
 import java.io.File
 
@@ -106,7 +107,11 @@ fun GarageScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onScan) { Icon(Icons.Filled.CameraAlt, "Scan a car") }
+            FloatingActionButton(
+                onClick = onScan,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+            ) { Icon(Icons.Filled.CameraAlt, "Scan a car") }
         },
     ) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
@@ -181,8 +186,9 @@ private fun CarCard(car: Car, onClick: () -> Unit) {
                 if (car.quantity > 1) Badge("×${car.quantity}", MaterialTheme.colorScheme.secondary)
             }
         }
-        Column(Modifier.padding(10.dp)) {
+        Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(car.name, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            (car.collectorNumber ?: car.toyNumber)?.let { PlateLabel(it) }
             if (car.rating > 0) StarRating(car.rating, size = 14.dp)
             val sub = listOfNotNull(car.year, car.series).joinToString(" · ")
             if (sub.isNotEmpty()) {

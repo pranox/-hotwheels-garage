@@ -92,6 +92,7 @@ import com.hotwheelsgarage.scan.Candidate
 import com.hotwheelsgarage.ui.common.Badge
 import com.hotwheelsgarage.ui.common.CarImage
 import com.hotwheelsgarage.ui.common.HuntBadge
+import com.hotwheelsgarage.ui.common.PlateLabel
 import com.hotwheelsgarage.ui.common.StarRating
 import com.hotwheelsgarage.ui.theme.SuperGold
 import com.hotwheelsgarage.ui.theme.TreasureGreen
@@ -399,7 +400,7 @@ private fun ConfirmStage(state: ScanUiState, vm: ScanViewModel, onSaved: () -> U
                 }
                 Row(Modifier.fillMaxWidth().padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text("My rating", fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
-                    StarRating(state.rating, size = 28.dp, onRate = vm::setRating)
+                    StarRating(state.rating, onRate = vm::setRating)
                 }
                 HuntToggle("Treasure Hunt", "Circle-flame logo on card", TreasureGreen, state.isTreasureHunt, vm::setTreasureHunt)
                 HuntToggle("Super Treasure Hunt", "Spectraflame paint + Real Riders", SuperGold, state.isSuperTreasureHunt, vm::setSuperTreasureHunt)
@@ -447,11 +448,13 @@ private fun VersionRow(release: Release?, selected: Boolean, onClick: () -> Unit
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
-                listOfNotNull(release.series, release.toyNumber).joinToString(" · "),
+                release.series.orEmpty(),
                 style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
+            release.toyNumber?.let { PlateLabel(it, Modifier.padding(top = 2.dp)) }
         }
         HuntBadge(release.isTreasureHunt, release.isSuperTreasureHunt)
     }
