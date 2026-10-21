@@ -52,6 +52,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hotwheelsgarage.data.Release
 import com.hotwheelsgarage.ui.common.CarImage
 import com.hotwheelsgarage.ui.common.HuntBadge
+import com.hotwheelsgarage.ui.common.PlateLabel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -159,10 +160,11 @@ private fun ReleaseCard(release: Release, onClick: () -> Unit) {
             CarImage(release.imageUrl, Modifier.fillMaxWidth().height(110.dp), contentScale = ContentScale.Crop)
             HuntBadge(release.isTreasureHunt, release.isSuperTreasureHunt, Modifier.padding(6.dp))
         }
-        Column(Modifier.padding(10.dp)) {
+        Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(release.modelName, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            release.collectorNumber?.let { PlateLabel(it) }
             Text(
-                listOfNotNull(release.series, release.collectorNumber).joinToString(" · "),
+                release.series.orEmpty(),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 2,

@@ -82,7 +82,7 @@ private fun seriesName(series: String?): String =
     series?.replace(Regex("\\s*\\d+/\\d+\\s*$"), "")?.trim()?.ifEmpty { null } ?: "Unknown"
 
 @Composable
-private fun Tile(label: String, value: String, modifier: Modifier, accent: Color = MaterialTheme.colorScheme.primary) {
+private fun Tile(label: String, value: String, modifier: Modifier, accent: Color = MaterialTheme.colorScheme.onSurface) {
     Card(modifier) {
         Column(Modifier.padding(12.dp)) {
             Text(value, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = accent)
@@ -108,7 +108,7 @@ private fun Breakdown(title: String, counts: Map<String, Int>) {
                                 .fillMaxWidth(count / max.toFloat())
                                 .fillMaxHeight()
                                 .clip(RoundedCornerShape(4.dp))
-                                .background(MaterialTheme.colorScheme.primary),
+                                .background(MaterialTheme.colorScheme.secondary),
                         )
                     }
                     Text(count.toString(), Modifier.weight(0.1f).padding(start = 6.dp), style = MaterialTheme.typography.bodySmall)
