@@ -25,7 +25,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -50,6 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hotwheelsgarage.data.Car
 import com.hotwheelsgarage.ui.common.Badge
 import com.hotwheelsgarage.ui.common.CarImage
+import com.hotwheelsgarage.ui.common.FlameButton
 import com.hotwheelsgarage.ui.common.HuntBadge
 import com.hotwheelsgarage.ui.common.PlateLabel
 import com.hotwheelsgarage.ui.common.StarRating
@@ -107,11 +107,7 @@ fun GarageScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onScan,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-            ) { Icon(Icons.Filled.CameraAlt, "Scan a car") }
+            FlameButton(onClick = onScan) { Icon(Icons.Filled.CameraAlt, "Scan a car") }
         },
     ) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
@@ -189,7 +185,7 @@ private fun CarCard(car: Car, onClick: () -> Unit) {
         Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(car.name, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
             (car.collectorNumber ?: car.toyNumber)?.let { PlateLabel(it) }
-            if (car.rating > 0) StarRating(car.rating, size = 14.dp)
+            StarRating(car.rating, size = 16.dp)
             val sub = listOfNotNull(car.year, car.series).joinToString(" · ")
             if (sub.isNotEmpty()) {
                 Text(

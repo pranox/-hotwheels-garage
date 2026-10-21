@@ -3,6 +3,8 @@ package com.hotwheelsgarage.ui.common
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
@@ -11,9 +13,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material.icons.filled.Whatshot
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,13 +27,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
+import com.hotwheelsgarage.data.Rarity
+import com.hotwheelsgarage.data.RarityLevel
+import com.hotwheelsgarage.ui.theme.CardBlue
 import com.hotwheelsgarage.ui.theme.Chrome
+import com.hotwheelsgarage.ui.theme.FlameGradient
 import com.hotwheelsgarage.ui.theme.Garage
 import com.hotwheelsgarage.ui.theme.Ink
 import com.hotwheelsgarage.ui.theme.Plate
@@ -125,6 +134,46 @@ fun StarRating(rating: Int, modifier: Modifier = Modifier, size: Dp = 28.dp, onR
                     Icon(icon, if (star == rating) "Clear rating" else "Rate $star of 5", tint = tint, modifier = Modifier.size(size))
                 }
             }
+        }
+    }
+}
+
+/** The scan button: a floating action button filled with the Hot Wheels flame gradient. */
+@Composable
+fun FlameButton(onClick: () -> Unit, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(16.dp),
+        color = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
+        shadowElevation = 6.dp,
+        modifier = modifier.size(56.dp),
+    ) {
+        Box(Modifier.background(FlameGradient), contentAlignment = Alignment.Center) { content() }
+    }
+}
+
+/** Big alert shown when a scan turns out to be a rare find. */
+@Composable
+fun RarityBanner(rarity: Rarity, modifier: Modifier = Modifier) {
+    val fill = when (rarity.level) {
+        RarityLevel.SuperTreasureHunt -> SuperGold
+        RarityLevel.TreasureHunt -> TreasureGreen
+        RarityLevel.Limited -> CardBlue
+    }
+    Row(
+        modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(fill)
+            .padding(16.dp)
+            .semantics(mergeDescendants = true) {},
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(Icons.Filled.Whatshot, null, tint = Garage, modifier = Modifier.size(40.dp))
+        Column(Modifier.padding(start = 12.dp)) {
+            Text(rarity.title, color = Garage, fontSize = 22.sp, fontWeight = FontWeight.Black)
+            Text(rarity.detail, color = Garage, fontSize = 14.sp, fontWeight = FontWeight.Medium)
         }
     }
 }

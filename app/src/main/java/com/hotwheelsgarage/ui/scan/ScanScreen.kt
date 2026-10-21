@@ -93,6 +93,11 @@ import com.hotwheelsgarage.ui.common.Badge
 import com.hotwheelsgarage.ui.common.CarImage
 import com.hotwheelsgarage.ui.common.HuntBadge
 import com.hotwheelsgarage.ui.common.PlateLabel
+import com.hotwheelsgarage.ui.common.RarityBanner
+import com.hotwheelsgarage.data.RarityCheck
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import com.hotwheelsgarage.ui.theme.OwnedContainer
 import com.hotwheelsgarage.ui.common.StarRating
 import com.hotwheelsgarage.ui.theme.SuperGold
 import com.hotwheelsgarage.ui.theme.TreasureGreen
@@ -282,6 +287,11 @@ private fun ResultsStage(state: ScanUiState, vm: ScanViewModel) {
                     }
                 }
             }
+            state.candidates.firstNotNullOfOrNull { c ->
+                c.release?.let { RarityCheck.of(it.isTreasureHunt, it.isSuperTreasureHunt, it.series) }
+            }?.let { rare ->
+                item { RarityBanner(rare, Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) }
+            }
             items(state.notes) { note ->
                 Text(
                     note,
@@ -332,6 +342,12 @@ private fun CandidateRow(candidate: Candidate, onClick: () -> Unit) {
 private fun ConfirmStage(state: ScanUiState, vm: ScanViewModel, onSaved: () -> Unit) {
     val candidate = state.selected ?: return
     val details = state.details
+    val rarity = RarityCheck.of(state.isTreasureHunt, state.isSuperTreasureHunt, state.chosenRelease?.series)
+    // A rare find gets a buzz the moment it's recognised.
+    val haptics = LocalHapticFeedback.current
+    LaunchedEffect(candidate.title, rarity?.level) {
+        if (rarity != null) haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -340,7 +356,7 @@ private fun ConfirmStage(state: ScanUiState, vm: ScanViewModel, onSaved: () -> U
             )
         },
         bottomBar = {
-            Surface(tonalElevation = 3.dp) {
+            Surface(color = MaterialTheme.colorScheme.surfaceContainer) {
                 Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     OutlinedButton(onClick = { vm.save(wishlist = true, onSaved) }, modifier = Modifier.weight(1f)) {
                         Text("Add to wishlist")
@@ -362,8 +378,12 @@ private fun ConfirmStage(state: ScanUiState, vm: ScanViewModel, onSaved: () -> U
                     )
                 }
                 Spacer(Modifier.height(12.dp))
+                rarity?.let {
+                    RarityBanner(it)
+                    Spacer(Modifier.height(12.dp))
+                }
                 if (candidate.ownedCount > 0) {
-                    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                    Card(colors = CardDefaults.cardColors(containerColor = OwnedContainer)) {
                         Text(
                             "You already own ${candidate.ownedCount} of this casting.",
                             Modifier.padding(12.dp).fillMaxWidth(),
