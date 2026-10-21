@@ -51,10 +51,11 @@ import com.hotwheelsgarage.data.Car
 import com.hotwheelsgarage.ui.common.Badge
 import com.hotwheelsgarage.ui.common.CarImage
 import com.hotwheelsgarage.ui.common.HuntBadge
+import com.hotwheelsgarage.ui.common.StarRating
 import java.io.File
 
 enum class GarageFilter(val label: String) {
-    Owned("Garage"), Wishlist("Wishlist"), Hunts("Treasure Hunts"), Carded("Carded"), Loose("Loose")
+    Owned("Garage"), TopRated("Top rated"), Wishlist("Wishlist"), Hunts("Treasure Hunts"), Carded("Carded"), Loose("Loose")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,6 +74,7 @@ fun GarageScreen(
         cars.orEmpty().filter { car ->
             val matchesFilter = when (filter) {
                 GarageFilter.Owned -> !car.isWishlist
+                GarageFilter.TopRated -> !car.isWishlist && car.rating > 0
                 GarageFilter.Wishlist -> car.isWishlist
                 GarageFilter.Hunts -> !car.isWishlist && (car.isTreasureHunt || car.isSuperTreasureHunt)
                 GarageFilter.Carded -> !car.isWishlist && car.condition == Car.CONDITION_CARDED
@@ -81,9 +83,11 @@ fun GarageScreen(
             val q = query.trim()
             matchesFilter && (q.isEmpty() || listOfNotNull(car.name, car.series, car.year, car.color, car.toyNumber)
                 .any { it.contains(q, ignoreCase = true) })
-        }
+        }.let { list -> if (filter == GarageFilter.TopRated) list.sortedByDescending { it.rating } else list }
     }
     val ownedCount = cars.orEmpty().filterNot { it.isWishlist }.sumOf { it.quantity }
+    val rated = cars.orEmpty().filter { !it.isWishlist && it.rating > 0 }
+    val averageRating = if (rated.isEmpty()) null else rated.map { it.rating }.average()
 
     Scaffold(
         topBar = {
@@ -91,7 +95,11 @@ fun GarageScreen(
                 title = {
                     Column {
                         Text("My Garage", fontWeight = FontWeight.Bold)
-                        Text(if (ownedCount == 1) "1 car" else "$ownedCount cars", style = MaterialTheme.typography.bodySmall)
+                        Text(
+                            (if (ownedCount == 1) "1 car" else "$ownedCount cars") +
+                                (averageRating?.let { " · ★ %.1f avg rating".format(it) } ?: ""),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
                     }
                 },
                 actions = { IconButton(onClick = onSettings) { Icon(Icons.Filled.Settings, "Settings") } },
@@ -175,6 +183,7 @@ private fun CarCard(car: Car, onClick: () -> Unit) {
         }
         Column(Modifier.padding(10.dp)) {
             Text(car.name, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            if (car.rating > 0) StarRating(car.rating, size = 14.dp)
             val sub = listOfNotNull(car.year, car.series).joinToString(" · ")
             if (sub.isNotEmpty()) {
                 Text(

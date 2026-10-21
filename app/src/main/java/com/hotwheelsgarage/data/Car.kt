@@ -27,6 +27,8 @@ data class Car(
     val quantity: Int = 1,
     val pricePaid: Double? = null,
     val notes: String = "",
+    /** Your own 1–5 star rating, 0 = not rated. */
+    val rating: Int = 0,
     val addedAt: Long = System.currentTimeMillis(),
 ) {
     companion object {

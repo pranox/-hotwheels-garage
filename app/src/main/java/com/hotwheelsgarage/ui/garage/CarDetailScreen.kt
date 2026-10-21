@@ -49,6 +49,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hotwheelsgarage.data.Car
 import com.hotwheelsgarage.ui.common.CarImage
+import com.hotwheelsgarage.ui.common.StarRating
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,6 +96,10 @@ fun CarDetailScreen(onBack: () -> Unit, vm: CarDetailViewModel = viewModel()) {
                         Modifier.weight(1f).aspectRatio(4f / 3f).clip(RoundedCornerShape(12.dp)),
                     )
                 }
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("My rating", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                StarRating(current.rating, onRate = { r -> update { copy(rating = r) } })
             }
             if (current.isWishlist) {
                 OutlinedButton(onClick = { update { copy(isWishlist = false) } }, modifier = Modifier.fillMaxWidth()) {
